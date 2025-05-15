@@ -61,8 +61,7 @@ const Dashboard = ({ language = 'km', darkMode = false }) => {
   const fetchStats = async () => {
   try {
     setLoading(true);
-    const response = await fetch('https://task-manager-backend.free.nf/api/?page=1&search=');
-
+const response = await axios.get(`http://task-manager-backend.free.nf/api/index.php?page=${page}&search=${search}`);
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
