@@ -298,104 +298,104 @@ const TaskManager = ({ language = 'km', darkMode = false }) => {
     document.body.classList.toggle('dark-mode', darkMode);
   }, [darkMode]);
 
-  const fetchCategories = async () => {
-  try {
-    setLoading(true);
-    const response = await axios.get('https://task-manager-backend.free.nf/api/categories.php');
-    setCategories(response.data);
-  } catch (err) {
-    setError('Failed to fetch categories');
-  } finally {
-    setLoading(false);
-  }
+const fetchCategories = async () => {
+    try {
+        setLoading(true);
+        const response = await axios.get('http://task-manager-backend.free.nf/api/categories.php');
+        setCategories(response.data);
+    } catch (err) {
+        setError('Failed to fetch categories');
+    } finally {
+        setLoading(false);
+    }
 };
 
 const fetchTasks = async () => {
-  try {
-    setLoading(true);
-    const response = await axios.get(`https://task-manager-backend.free.nf/api/index.php?page=${page}&search=${search}`);
-    setTasks(response.data.tasks);
-    setTotalPages(Math.ceil(response.data.total / response.data.limit));
-  } catch (err) {
-    setError('Failed to fetch tasks');
-  } finally {
-    setLoading(false);
-  }
+    try {
+        setLoading(true);
+        const response = await axios.get(`http://task-manager-backend.free.nf/api/index.php?page=${page}&search=${search}`);
+        setTasks(response.data.tasks);
+        setTotalPages(Math.ceil(response.data.total / response.data.limit));
+    } catch (err) {
+        setError('Failed to fetch tasks');
+    } finally {
+        setLoading(false);
+    }
 };
 
 const fetchReminders = async (taskId) => {
-  try {
-    const response = await axios.get(`https://task-manager-backend.free.nf/api/reminders.php?task_id=${taskId}`);
-    setReminders(prev => ({ ...prev, [taskId]: response.data }));
-  } catch (err) {
-    setError('Failed to fetch reminders');
-  }
+    try {
+        const response = await axios.get(`http://task-manager-backend.free.nf/api/reminders.php?task_id=${taskId}`);
+        setReminders(prev => ({ ...prev, [taskId]: response.data }));
+    } catch (err) {
+        setError('Failed to fetch reminders');
+    }
 };
 
 const fetchShares = async (taskId) => {
-  try {
-    const response = await axios.get(`https://task-manager-backend.free.nf/api/shares.php?task_id=${taskId}`);
-    setShares(prev => ({ ...prev, [taskId]: response.data }));
-  } catch (err) {
-    setError('Failed to fetch shares');
-  }
+    try {
+        const response = await axios.get(`http://task-manager-backend.free.nf/api/shares.php?task_id=${taskId}`);
+        setShares(prev => ({ ...prev, [taskId]: response.data }));
+    } catch (err) {
+        setError('Failed to fetch shares');
+    }
 };
 
 const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    setLoading(true);
-    const task = { title, description, status, priority, due_date: dueDate, category_id: categoryId, progress };
-    if (editId) {
-      await axios.put('https://task-manager-backend.free.nf/api/index.php', { id: editId, ...task });
-      showNotification(`${t.taskTitle} ${title} ${language === 'km' ? 'បានធ្វើបច្ចុប្បន្នភាព' : 'updated successfully'}`, 'success');
-      setEditId(null);
-    } else {
-      await axios.post('https://task-manager-backend.free.nf/api/index.php', task);
-      showNotification(`${t.taskTitle} ${title} ${language === 'km' ? 'បានបន្ថែម' : 'added successfully'}`, 'success');
+    e.preventDefault();
+    try {
+        setLoading(true);
+        const task = { title, description, status, priority, due_date: dueDate, category_id: categoryId, progress };
+        if (editId) {
+            await axios.put('http://task-manager-backend.free.nf/api/index.php', { id: editId, ...task });
+            showNotification(`${t.taskTitle} ${title} ${language === 'km' ? 'បានធ្វើបច្ចុប្បន្នភាព' : 'updated successfully'}`, 'success');
+            setEditId(null);
+        } else {
+            await axios.post('http://task-manager-backend.free.nf/api/index.php', task);
+            showNotification(`${t.taskTitle} ${title} ${language === 'km' ? 'បានបន្ថែម' : 'added successfully'}`, 'success');
+        }
+        resetForm();
+        fetchTasks();
+    } catch (err) {
+        setError('Failed to save task');
+    } finally {
+        setLoading(false);
     }
-    resetForm();
-    fetchTasks();
-  } catch (err) {
-    setError('Failed to save task');
-  } finally {
-    setLoading(false);
-  }
 };
 
 const handleAddReminder = async (taskId) => {
-  if (!newReminder) return;
-  try {
-    await axios.post('https://task-manager-backend.free.nf/api/reminders.php', { task_id: taskId, reminder_date: newReminder });
-    setNewReminder('');
-    fetchReminders(taskId);
-    showNotification(language === 'km' ? 'បានបន្ថែមការរំលឹក' : 'Reminder added successfully', 'success');
-  } catch (err) {
-    setError('Failed to add reminder');
-  }
+    if (!newReminder) return;
+    try {
+        await axios.post('http://task-manager-backend.free.nf/api/reminders.php', { task_id: taskId, reminder_date: newReminder });
+        setNewReminder('');
+        fetchReminders(taskId);
+        showNotification(language === 'km' ? 'បានបន្ថែមការរំលឹក' : 'Reminder added successfully', 'success');
+    } catch (err) {
+        setError('Failed to add reminder');
+    }
 };
 
 const handleShareTask = async (taskId) => {
-  if (!shareEmail) return;
-  try {
-    await axios.post('https://task-manager-backend.free.nf/api/shares.php', { task_id: taskId, email: shareEmail });
-    setShareEmail('');
-    fetchShares(taskId);
-    showNotification(language === 'km' ? 'បានចែករំលែកភារកិច្ច' : 'Task shared successfully', 'success');
-  } catch (err) {
-    setError('Failed to share task');
-  }
+    if (!shareEmail) return;
+    try {
+        await axios.post('http://task-manager-backend.free.nf/api/shares.php', { task_id: taskId, email: shareEmail });
+        setShareEmail('');
+        fetchShares(taskId);
+        showNotification(language === 'km' ? 'បានចែករំលែកភារកិច្ច' : 'Task shared successfully', 'success');
+    } catch (err) {
+        setError('Failed to share task');
+    }
 };
 
 const handleDelete = async (id) => {
-  if (!window.confirm(t.confirmDelete)) return;
-  try {
-    await axios.delete('https://task-manager-backend.free.nf/api/index.php', { data: { id } });
-    fetchTasks();
-    showNotification(language === 'km' ? 'បានលុបភារកិច្ច' : 'Task deleted successfully', 'success');
-  } catch (err) {
-    setError('Failed to delete task');
-  }
+    if (!window.confirm(t.confirmDelete)) return;
+    try {
+        await axios.delete('http://task-manager-backend.free.nf/api/index.php', { data: { id } });
+        fetchTasks();
+        showNotification(language === 'km' ? 'បានលុបភារកិច្ច' : 'Task deleted successfully', 'success');
+    } catch (err) {
+        setError('Failed to delete task');
+    }
 };
 const handleEdit = (task) => {
   setTitle(task.title);
