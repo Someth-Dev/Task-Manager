@@ -59,38 +59,38 @@ const Dashboard = ({ language = 'km', darkMode = false }) => {
   }, []);
 
   const fetchStats = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('http://localhost/task-manager/api/index.php?page=1&search=');
+  try {
+    setLoading(true);
+    const response = await fetch('https://task-manager-backend.free.nf/api/?page=1&search=');
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const tasks = data.tasks;
-      const totalTasks = tasks.length;
-      const pendingTasks = tasks.filter(task => task.status === 'Pending').length;
-      const completedTasks = tasks.filter(task => task.status === 'Completed').length;
-      const averageProgress = tasks.length
-        ? (tasks.reduce((sum, task) => sum + parseFloat(task.progress), 0) / tasks.length).toFixed(1)
-        : 0;
-
-      setStats({ totalTasks, pendingTasks, completedTasks, averageProgress });
-      setLoading(false);
-    } catch (err) {
-      console.error("Error fetching data:", err);
-      setError(err.message);
-      // Fallback data
-      setStats({
-        totalTasks: 24,
-        pendingTasks: 10,
-        completedTasks: 14,
-        averageProgress: 58.5
-      });
-      setLoading(false);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
-  };
+
+    const data = await response.json();
+    const tasks = data.tasks;
+    const totalTasks = tasks.length;
+    const pendingTasks = tasks.filter(task => task.status === 'Pending').length;
+    const completedTasks = tasks.filter(task => task.status === 'Completed').length;
+    const averageProgress = tasks.length
+      ? (tasks.reduce((sum, task) => sum + parseFloat(task.progress), 0) / tasks.length).toFixed(1)
+      : 0;
+
+    setStats({ totalTasks, pendingTasks, completedTasks, averageProgress });
+    setLoading(false);
+  } catch (err) {
+    console.error("Error fetching data:", err);
+    setError(err.message);
+    // Fallback data
+    setStats({
+      totalTasks: 24,
+      pendingTasks: 10,
+      completedTasks: 14,
+      averageProgress: 58.5
+    });
+    setLoading(false);
+  }
+};
 
   const cardColors = ["primary", "warning", "success", "info"];
   const icons = ["bi-list-check", "bi-hourglass-split", "bi-check-circle", "bi-graph-up"];
