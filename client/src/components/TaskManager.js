@@ -304,7 +304,7 @@ const fetchCategories = async () => {
         const response = await axios.get('http://task-manager-backend.free.nf/api/categories.php');
         setCategories(response.data);
     } catch (err) {
-        setError('Failed to fetch categories');
+        setError('Failed to fetch categories: ' + err.message);
     } finally {
         setLoading(false);
     }
@@ -317,7 +317,7 @@ const fetchTasks = async () => {
         setTasks(response.data.tasks);
         setTotalPages(Math.ceil(response.data.total / response.data.limit));
     } catch (err) {
-        setError('Failed to fetch tasks');
+        setError('Failed to fetch tasks: ' + err.message);
     } finally {
         setLoading(false);
     }
@@ -328,7 +328,7 @@ const fetchReminders = async (taskId) => {
         const response = await axios.get(`http://task-manager-backend.free.nf/api/reminders.php?task_id=${taskId}`);
         setReminders(prev => ({ ...prev, [taskId]: response.data }));
     } catch (err) {
-        setError('Failed to fetch reminders');
+        setError('Failed to fetch reminders: ' + err.message);
     }
 };
 
@@ -337,7 +337,7 @@ const fetchShares = async (taskId) => {
         const response = await axios.get(`http://task-manager-backend.free.nf/api/shares.php?task_id=${taskId}`);
         setShares(prev => ({ ...prev, [taskId]: response.data }));
     } catch (err) {
-        setError('Failed to fetch shares');
+        setError('Failed to fetch shares: ' + err.message);
     }
 };
 
