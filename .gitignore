@@ -4,3 +4,4 @@ dist/
 vendor/
 *.log
 *.sql
+node_modules/
