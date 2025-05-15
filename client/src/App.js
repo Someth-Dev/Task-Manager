@@ -19,6 +19,7 @@ const App = () => {
             <Link className="nav-link" to="/">Dashboard</Link>
             <Link className="nav-link" to="/tasks">Tasks</Link>
             <Link className="nav-link" to="/about">About</Link>
+            <button onClick={() => alert('Logged out')}>Logout</button>
           </div>
           <div className="d-flex align-items-center">
             <select
