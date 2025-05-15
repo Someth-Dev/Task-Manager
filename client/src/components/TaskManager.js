@@ -397,7 +397,18 @@ const handleDelete = async (id) => {
     setError('Failed to delete task');
   }
 };
-
+const handleEdit = (task) => {
+  setTitle(task.title);
+  setDescription(task.description);
+  setStatus(task.status);
+  setPriority(task.priority);
+  setDueDate(task.due_date);
+  setCategoryId(task.category_id);
+  setProgress(task.progress);
+  setEditId(task.id);
+  fetchReminders(task.id);
+  fetchShares(task.id);
+};
   const resetForm = () => {
     setTitle('');
     setDescription('');
